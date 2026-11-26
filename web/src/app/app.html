@@ -1,0 +1,17 @@
+<!-- Rendered once at the shell so any effect can raise a toast without the component that
+     triggered it needing to host the outlet. -->
+<p-toast position="bottom-right" />
+<p-confirmdialog />
+
+<div class="shell">
+  <nav class="shell__nav">
+    <a class="shell__brand" routerLink="/contacts">
+      <i class="pi pi-address-book"></i>
+      <span>Invelop Contacts</span>
+    </a>
+  </nav>
+
+  <main class="shell__main">
+    <router-outlet />
+  </main>
+</div>

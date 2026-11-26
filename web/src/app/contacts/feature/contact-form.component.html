@@ -1,0 +1,135 @@
+<section class="page page--narrow">
+  <header class="page__header">
+    <div>
+      <h1>{{ editingId ? 'Edit contact' : 'New contact' }}</h1>
+      <p class="page__subtitle">All fields are required.</p>
+    </div>
+  </header>
+
+  @if (saveError() || unmappedErrors().length) {
+    <!-- Banner for anything that is not a single field's problem: a server outage, an
+         object-level error, or a field the client does not know about. -->
+    <p-message severity="error" styleClass="w-full mb-3" data-testid="save-error">
+      <div class="message-body message-body--stacked">
+        <span>{{ saveError() }}</span>
+        @for (message of unmappedErrors(); track message) {
+          <span>{{ message }}</span>
+        }
+      </div>
+    </p-message>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="field-grid">
+      <div class="field">
+        <label for="firstName">First name</label>
+        <input
+          pInputText
+          id="firstName"
+          formControlName="firstName"
+          autocomplete="given-name"
+          data-testid="firstName"
+          [attr.aria-invalid]="messages()['firstName'] ? 'true' : null"
+        />
+        @if (messages()['firstName']; as message) {
+          <small class="field__error" data-testid="firstName-error">{{ message }}</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="surname">Surname</label>
+        <input
+          pInputText
+          id="surname"
+          formControlName="surname"
+          autocomplete="family-name"
+          data-testid="surname"
+          [attr.aria-invalid]="messages()['surname'] ? 'true' : null"
+        />
+        @if (messages()['surname']; as message) {
+          <small class="field__error" data-testid="surname-error">{{ message }}</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="dateOfBirth">Date of birth</label>
+        <p-datepicker
+          inputId="dateOfBirth"
+          formControlName="dateOfBirth"
+          dateFormat="dd M yy"
+          [maxDate]="today"
+          [showIcon]="true"
+          appendTo="body"
+          data-testid="dateOfBirth"
+        />
+        @if (messages()['dateOfBirth']; as message) {
+          <small class="field__error" data-testid="dateOfBirth-error">{{ message }}</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="phoneNumber">Phone number</label>
+        <input
+          pInputText
+          id="phoneNumber"
+          formControlName="phoneNumber"
+          autocomplete="tel"
+          placeholder="+31 20 123 4567"
+          data-testid="phoneNumber"
+          [attr.aria-invalid]="messages()['phoneNumber'] ? 'true' : null"
+        />
+        @if (messages()['phoneNumber']; as message) {
+          <small class="field__error" data-testid="phoneNumber-error">{{ message }}</small>
+        }
+      </div>
+
+      <div class="field field--wide">
+        <label for="iban">IBAN</label>
+        <input
+          pInputText
+          id="iban"
+          formControlName="iban"
+          placeholder="NL91 ABNA 0417 1643 00"
+          data-testid="iban"
+          [attr.aria-invalid]="messages()['iban'] ? 'true' : null"
+        />
+        @if (messages()['iban']; as message) {
+          <small class="field__error" data-testid="iban-error">{{ message }}</small>
+        }
+      </div>
+
+      <div class="field field--wide">
+        <label for="address">Address</label>
+        <textarea
+          pTextarea
+          id="address"
+          formControlName="address"
+          rows="3"
+          autocomplete="street-address"
+          data-testid="address"
+          [attr.aria-invalid]="messages()['address'] ? 'true' : null"
+        ></textarea>
+        @if (messages()['address']; as message) {
+          <small class="field__error" data-testid="address-error">{{ message }}</small>
+        }
+      </div>
+    </div>
+
+    <footer class="form-actions">
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        [text]="true"
+        type="button"
+        (onClick)="cancel()"
+      />
+      <p-button
+        label="Update contact"
+        icon="pi pi-check"
+        type="submit"
+        [loading]="saving()"
+        data-testid="save-contact"
+      />
+    </footer>
+  </form>
+</section>

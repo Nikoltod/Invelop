@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <!--
+      EF Core (abstractions only, not a provider) is referenced so IAppDbContext can
+      expose DbSet<Contact> and query handlers can project with AsNoTracking().
+      The concrete provider stays in Infrastructure.
+    -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="FluentValidation" />
+    <!-- AddApplication() lives here, so the DI extensions do too. -->
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Invelop.Contacts.Domain\Invelop.Contacts.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

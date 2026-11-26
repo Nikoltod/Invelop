@@ -1,0 +1,28 @@
+{
+  "name": "invelop-contacts-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "End-to-end tests for the Invelop Contacts app. The Angular workspace lives in ./web.",
+  "scripts": {
+    "db:update": "DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false ASPNETCORE_HOSTBUILDER__RELOADCONFIGONCHANGE=false dotnet tool run dotnet-ef database update --project src/Invelop.Contacts.Infrastructure --startup-project src/Invelop.Contacts.Api",
+    "setup:fresh": "npm ci && npm --prefix web ci && dotnet restore Invelop.Contacts.slnx && dotnet tool restore && npm run db:update",
+    "verify:all": "npm run test:backend && npm run build:frontend && npm run test:frontend && npm run test:e2e",
+    "verify:ship": "npm run verify:all && npm run build:backend:release && npm run publish:backend",
+    "preview": "concurrently --names backend,frontend --prefix-colors blue,green \"npm run start:backend\" \"npm run start:frontend\"",
+    "start": "npm run preview",
+    "start:backend": "DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false ASPNETCORE_HOSTBUILDER__RELOADCONFIGONCHANGE=false dotnet run --project src/Invelop.Contacts.Api/Invelop.Contacts.Api.csproj --launch-profile http",
+    "start:frontend": "npm --prefix web start",
+    "build:backend": "dotnet build Invelop.Contacts.slnx",
+    "build:backend:release": "dotnet build Invelop.Contacts.slnx -c Release --no-restore",
+    "publish:backend": "dotnet publish src/Invelop.Contacts.Api/Invelop.Contacts.Api.csproj -c Release --no-build -o artifacts/api",
+    "test:backend": "dotnet test Invelop.Contacts.slnx",
+    "build:frontend": "npm --prefix web run build",
+    "test:frontend": "npm --prefix web test -- --watch=false",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "concurrently": "^10.0.7"
+  }
+}

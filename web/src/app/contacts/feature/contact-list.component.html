@@ -1,0 +1,98 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h1>Contacts</h1>
+      <p class="page__subtitle">Your personal contact list.</p>
+    </div>
+
+    <p-button
+      label="Add contact"
+      icon="pi pi-plus"
+      routerLink="/contacts/new"
+      data-testid="add-contact"
+    />
+  </header>
+
+  @if (hasError()) {
+    <!-- Failure state. The list is kept out of the DOM entirely rather than shown empty, so a
+         load failure is never mistaken for "you have no contacts". -->
+    <p-message severity="error" styleClass="w-full" data-testid="load-error">
+      <div class="message-body">
+        <span>{{ loadError() }}</span>
+        <p-button label="Retry" size="small" severity="secondary" (onClick)="retry()" />
+      </div>
+    </p-message>
+  } @else if (isLoading()) {
+    <!-- Skeleton rows rather than a spinner: the page keeps its shape, so nothing jumps when
+         the real rows arrive. -->
+    <div class="skeletons" data-testid="loading">
+      @for (row of skeletonRows; track row) {
+        <p-skeleton height="3rem" styleClass="mb-2" />
+      }
+    </div>
+  } @else {
+    <p-table
+      [value]="contacts()"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      dataKey="id"
+      data-testid="contacts-table"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>Date of birth</th>
+          <th>Phone</th>
+          <th>IBAN</th>
+          <th>Address</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-contact>
+        <tr data-testid="contact-row">
+          <td>
+            <span class="contact-name">{{ contact.firstName }} {{ contact.surname }}</span>
+          </td>
+          <td>{{ formatDateOnly(contact.dateOfBirth) }}</td>
+          <td>{{ contact.phoneNumber }}</td>
+          <td class="mono">{{ formatIban(contact.iban) }}</td>
+          <td class="address">{{ contact.address }}</td>
+          <td>
+            <div class="row-actions">
+              <p-button
+                icon="pi pi-pencil"
+                [text]="true"
+                [rounded]="true"
+                severity="secondary"
+                [routerLink]="['/contacts', contact.id, 'edit']"
+                [attr.data-testid]="'edit-' + contact.id"
+                title="Edit contact"
+              />
+              <p-button
+                icon="pi pi-trash"
+                [rounded]="true"
+                severity="danger"
+                (onClick)="confirmDelete(contact)"
+                [attr.data-testid]="'delete-' + contact.id"
+                title="Delete contact"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">
+            <div class="empty" data-testid="empty-state">
+              <i class="pi pi-users empty__icon"></i>
+              <p class="empty__title">No contacts yet</p>
+              <p class="empty__hint">Add your first contact to get started.</p>
+              <p-button label="Add contact" icon="pi pi-plus" routerLink="/contacts/new" />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+</section>

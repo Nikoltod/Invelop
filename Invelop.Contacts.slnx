@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Invelop.Contacts.Api/Invelop.Contacts.Api.csproj" />
+    <Project Path="src/Invelop.Contacts.Application/Invelop.Contacts.Application.csproj" />
+    <Project Path="src/Invelop.Contacts.Domain/Invelop.Contacts.Domain.csproj" />
+    <Project Path="src/Invelop.Contacts.Infrastructure/Invelop.Contacts.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Invelop.Contacts.Application.Tests/Invelop.Contacts.Application.Tests.csproj" />
+    <Project Path="tests/Invelop.Contacts.Domain.Tests/Invelop.Contacts.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

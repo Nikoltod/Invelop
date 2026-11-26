@@ -1,0 +1,31 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+
+[*.{cs,csproj,props,targets}]
+indent_size = 4
+
+[*.cs]
+# File-scoped namespaces and `var` where the type is obvious: house style, enforced in build.
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_style_var_when_type_is_apparent = true:suggestion
+dotnet_sort_system_directives_first = true
+
+# EF Core writes these, not us. Without this, `dotnet ef migrations add` produces a file that
+# fails the build on house style (IDE0161) because warnings are errors - which would make adding
+# a migration a two-step chore forever.
+[**/Migrations/*.cs]
+generated_code = true
+dotnet_analyzer_diagnostic.severity = none
+dotnet_diagnostic.IDE0161.severity = none
+
+[*.{ts,html,scss,css,json,yml,yaml,js}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
